@@ -56,9 +56,7 @@ const SeasonalResults = () => {
               <th>{title}</th>
             ))}
           </tr>
-          {/* Responsive */}
         </thead>
-        {/* Responsive */}
         {data.slice(0, perPage).map((result) => (
           <tbody>
             <ResultsTable props={result} />
