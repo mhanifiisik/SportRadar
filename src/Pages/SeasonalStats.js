@@ -5,29 +5,19 @@ import SeasonStatsTable from "../Components/SeasonStatsTable";
 
 const SeasonalStats = () => {
   const [data, setData] = useState([]);
-  const [seasons, setSeasons] = useState([]);
-  const [selectedSeason, setSelectedSeason] = useState("sr:season:84320");
 
   const getData = async () => {
     const seasons = await axios.get(getSeasons());
-    const data = await axios.get(getSeasonalStats(selectedSeason));
-    setSeasons(seasons.data.seasons);
+    const data = await axios.get(getSeasonalStats("sr:season:84320"));
     setData(data.data.standings[0].groups[0].standings);
   };
   useEffect(() => {
     getData();
   }, []);
-  console.log(data);
   return (
-    <div>
+    <div className="overflow-x-auto">
       <p>Seasonal Stats</p>
-      <select onChange={(e) => setSelectedSeason(e.target.value)}>
-        {seasons.map((season) => (
-          <option value={season.id}>{season.year}</option>
-        ))}
-      </select>
-      {/* table */}
-      <table className="w-full text-center bg-white border border-black">
+      <table className="stats-table w-full text-center">
         <thead className="bg-[#4739B6] text-white">
           <tr>
             {[
@@ -41,13 +31,13 @@ const SeasonalStats = () => {
               "Goals against",
               "Average",
               "Points",
-            ].map((title) => (
-              <th>{title}</th>
+            ].map((title, index) => (
+              <th key={index}>{title}</th>
             ))}
           </tr>
         </thead>
         {data.map((teams) => (
-          <tbody>
+          <tbody key={teams.competitor.id}>
             <SeasonStatsTable props={teams} />
           </tbody>
         ))}

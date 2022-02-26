@@ -1,12 +1,17 @@
 import React from "react";
 import HomePage from "./Pages/HomePage";
-import Teams from "./Pages/Teams";
+import MatchInfoPage from "./Pages/MatchInfoPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <HomePage />
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<HomePage />} />
+          <Route exact path="/:id" element={<MatchInfoPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
