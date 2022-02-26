@@ -9,6 +9,7 @@ const HomePage = () => {
       <Navbar />
       <InfoContainer />
       <SeasonalResults />
+      <SeasonalStats />
     </div>
   );
 };
