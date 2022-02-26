@@ -7,7 +7,6 @@ const SeasonalStats = () => {
   const [data, setData] = useState([]);
 
   const getData = async () => {
-    const seasons = await axios.get(getSeasons());
     const data = await axios.get(getSeasonalStats("sr:season:84320"));
     setData(data.data.standings[0].groups[0].standings);
   };
