@@ -5,7 +5,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 const Navbar = () => {
   const [isOpen, setisOpen] = useState(false);
   return (
-    <div className="relative w-full bg-[#4739B6] border rounded">
+    <div className="relative w-full bg-[#4739B6]  rounded-b">
       <div className="flex flex-row h-20 justify-between items-center gap-x-5 px-5">
         <Link to="/" className="font-bold text-xl text-white">
           SPORT<span className="text-red-500">RADAR</span>

@@ -1,61 +1,49 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
+import DetailStats from "../Components/DetailStats";
 import { useLocation } from "react-router-dom";
-import { getDetailedMatchStats } from "../api";
+import { getDetailedMatchLineUp, getDetailedMatchStats } from "../api";
 import axios from "axios";
-import Statscard from "../Components/statscard";
 import { MdOutlineAccessTime, MdLocationOn } from "react-icons/md";
+import PercantagesofMatch from "../Components/PercantagesofMatch";
 
 const MatchInfoPage = () => {
-  const { state } = useLocation();
+  const location = useLocation();
   const [data, setData] = useState([]);
-  const [matchID, setMatchID] = useState("sr:sport_event:18363531");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const id = location.pathname.split("/")[2];
 
   const getData = async () => {
     setLoading(true);
-    const data = await axios.get(getDetailedMatchStats(matchID));
+    const data = await axios.get(getDetailedMatchStats(id));
+
     setData(data.data);
     setLoading(false);
   };
   useEffect(() => {
-    setMatchID(state);
     getData();
   }, []);
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading"></div>
-      </div>
-    );
-  }
   return (
     <div className="relative max-w-7xl mx-auto">
-      <Navbar />
-      <div className=" relative w-full  h-[calc(100vh-20rem)] mt-10 ">
-        <div className="flex  text-xl md:text-3xl flex-row justify-center items-center gap-x-2 mb-10">
-          <h2>{data.sport_event.competitors[0].name}</h2>
-          <div className="flex flex-row gap-x-5 border border-black mx-5 p-5">
-            <h2>{data.sport_event_status.home_score}</h2>
-            <h2>{data.sport_event_status.away_score}</h2>
-          </div>
-          <h2>{data.sport_event.competitors[1].name}</h2>
+      {data.length !== 0 && !loading ? (
+        <>
+          {data.sport_event_status.match_status === "ended" ? (
+            <PercantagesofMatch data={data} />
+          ) : data.sport_event_status.match_status === "postponed" ? (
+            <p>ERTELENDI</p>
+          ) : data.sport_event_status.match_status === "not_started" ? (
+            <p>BASLAMADI</p>
+          ) : (
+            <p>ERROR</p>
+          )}
+          <></>
+        </>
+      ) : (
+        //IF NO DATA LOADING SCREEN
+        <div className="loading-container">
+          <div className="loading"></div>
         </div>
-        <div className="flex flex-row justify-between pb-3">
-          <p className="flex flex-row justify-center items-center gap-x-2">
-            <MdOutlineAccessTime />
-            {data.sport_event.start_time.substr(0, 10)}
-          </p>
-          <p className="flex flex-row-reverse justify-center items-center gap-x-2">
-            <MdLocationOn />
-            {data.sport_event.venue.name}
-          </p>
-        </div>
-        <div className="w-full p-5 gap-x-5  flex flex-row justify-between items-center  border border-black">
-          <Statscard data={data} value={0} />
-          <Statscard data={data} value={1} />
-        </div>
-      </div>
+      )}
     </div>
   );
 };

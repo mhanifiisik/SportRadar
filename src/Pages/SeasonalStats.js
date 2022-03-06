@@ -15,32 +15,40 @@ const SeasonalStats = () => {
   }, []);
   return (
     <div className="overflow-x-auto">
-      <p>Seasonal Stats</p>
-      <table className="stats-table w-full text-center">
-        <thead className="bg-[#4739B6] text-white">
-          <tr>
-            {[
-              "#",
-              "Team",
-              "Played",
-              "Victory",
-              "Draw",
-              "Loss",
-              "Goals",
-              "Goals against",
-              "Average",
-              "Points",
-            ].map((title, index) => (
-              <th key={index}>{title}</th>
+      {data.length !== 0 ? (
+        <>
+          <p>Seasonal Stats</p>
+          <table className="stats-table w-full text-center">
+            <thead className="bg-[#4739B6] text-white">
+              <tr>
+                {[
+                  "#",
+                  "Team",
+                  "Played",
+                  "Victory",
+                  "Draw",
+                  "Loss",
+                  "Goals",
+                  "Goals against",
+                  "Average",
+                  "Points",
+                ].map((title, index) => (
+                  <th key={index}>{title}</th>
+                ))}
+              </tr>
+            </thead>
+            {data.map((teams) => (
+              <tbody key={teams.competitor.id}>
+                <SeasonStatsTable props={teams} />
+              </tbody>
             ))}
-          </tr>
-        </thead>
-        {data.map((teams) => (
-          <tbody key={teams.competitor.id}>
-            <SeasonStatsTable props={teams} />
-          </tbody>
-        ))}
-      </table>
+          </table>
+        </>
+      ) : (
+        <div className="loading-bar-container">
+          <div className="loading-bar" />
+        </div>
+      )}
     </div>
   );
 };

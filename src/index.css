@@ -4,9 +4,14 @@
 
 /* FONT */
 @import url("http://fonts.cdnfonts.com/css/gilroy-bold");
-
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
 body {
   background-color: #e9f0fb;
+
   font-family: "Gilroy-Regular", sans-serif;
 }
 
@@ -24,8 +29,8 @@ a {
 
 td,
 th {
-  margin: 0.6rem;
-  padding: 0.6rem;
+  margin: 0.3rem;
+  padding: 0.4rem;
 }
 td {
   background-color: #d0cced;
@@ -56,4 +61,27 @@ li {
   to {
     transform: rotate(360deg);
   }
+}
+
+.loading-main {
+  border: 1px solid black;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.loading-bar-container {
+  min-height: 50vh;
+  display: grid;
+  place-items: center;
+}
+
+.loading-bar {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid gray;
+  border-radius: 50%;
+  border-top-color: blue;
+  animation: spinner 0.8s ease-in-out infinite;
 }
