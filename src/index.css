@@ -42,6 +42,9 @@ li {
   align-items: center;
 }
 
+.matchinfo {
+  background-color: #010a0f !important;
+}
 /* LOADING */
 .loading-container {
   min-height: 100vh;

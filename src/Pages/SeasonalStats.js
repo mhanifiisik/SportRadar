@@ -12,6 +12,9 @@ const SeasonalStats = () => {
   };
   useEffect(() => {
     getData();
+    return () => {
+      getData();
+    };
   }, []);
   return (
     <div className="overflow-x-auto">

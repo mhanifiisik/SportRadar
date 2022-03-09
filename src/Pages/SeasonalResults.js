@@ -3,6 +3,7 @@ import { getSeasons, getAllResults } from "../api";
 import axios from "axios";
 import ResultsTable from "../Components/ResultsTable";
 import { FcPrevious, FcNext } from "react-icons/fc";
+import { VscLiveShare } from "react-icons/vsc";
 
 const SeasonalResults = () => {
   const [data, setData] = useState([]);
@@ -13,8 +14,8 @@ const SeasonalResults = () => {
 
   /* fetching Data  */
   const makeApiCall = async () => {
-    const seasons = await axios.get(getSeasons());
     const data = await axios.get(getAllResults(selectedSeason));
+    const seasons = await axios.get(getSeasons());
     setSeasons(seasons.data.seasons);
     setData(data.data.schedules);
     setWeek(
@@ -36,15 +37,16 @@ const SeasonalResults = () => {
     return EmptyArray;
   };
 
-  const finder = () => {
-    const date = new Date();
-    const TodayWeek = data.find(
-      (matches) =>
-        matches.sport_event.start_time.substring(0, 10) ===
-        date.toISOString().substring(0, 10)
+  //TO FIND CURRENT WEEK
+  const FindCurrentWeek = () => {
+    const ThisWeekFirstMatch = data.find(
+      (item) => item.sport_event_status.match_status === "not_started"
     );
-    return TodayWeek?.sport_event?.sport_event_context?.round?.number;
+    let week =
+      ThisWeekFirstMatch?.sport_event?.sport_event_context?.round?.number;
+    return week;
   };
+
   return (
     <div className="grid overflow-x-auto place-items-center ">
       {data.length !== 0 ? (
@@ -52,7 +54,7 @@ const SeasonalResults = () => {
           <div className="flex w-full flex-row justify-between items-center">
             <div className="flex flex-row justify-between items-center gap-x-5">
               <h3>Regular Season - Week {selectedWeek}</h3>
-              <div className="flex flex-row justify-between items-center gap-x-2">
+              <div className="hidden md:block flex flex-row justify-between items-center gap-x-2">
                 <span className="w-3 h-3 bg-green-500"></span>
                 <span className="w-3 h-3 bg-yellow-500"></span>
                 <span className="w-3 h-3 bg-red-500"></span>
@@ -62,14 +64,15 @@ const SeasonalResults = () => {
             <div className="flex flex-row justify-center items-center gap-x-5">
               <button
                 className={`${
-                  selectedWeek !== finder() &&
+                  selectedWeek !== FindCurrentWeek() &&
                   selectedSeason === "sr:season:84320"
                     ? "block"
                     : "hidden"
                 }`}
-                onClick={() => setSelectedWeek(finder())}
+                onClick={() => setSelectedWeek(FindCurrentWeek())}
               >
-                Go to Current Week
+                <p className="hidden md:block">Go to Current Week</p>{" "}
+                <VscLiveShare className="md:hidden" />
               </button>
               <button
                 className={{ disabled: "cursor-not-allowed" }}

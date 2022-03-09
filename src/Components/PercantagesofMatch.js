@@ -1,4 +1,10 @@
 import React, { useState } from "react";
+import { BiArrowBack } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+import FactsAboutMatch from "../Components/FactsAboutMatch";
+import DetailLineUp from "../Components/DetailStats";
 
 const PercantagesofMatch = ({ data }) => {
   function findPercantage(a, total) {
@@ -11,75 +17,79 @@ const PercantagesofMatch = ({ data }) => {
   for (const [key, value] of Object.entries(HomeTeam)) {
     EmptyArray.push([key, [value, AwayTeam[key]]]);
   }
-  console.log(data);
+  const matchid = data?.sport_event?.id;
   return (
-    <div className="w-[650px] mx-auto mt-10">
-      <div className="w-full h-32  flex flex-row justify-between  items-center px-5 k mb-5 bg-blue-600 rounded-l">
-        <div className="p-5 border border-black">
-          {data.sport_event.competitors[0].name}
-        </div>
-        <div className="p-3 flex flex-col justify-between item-center text-white">
-          <div className="flex flex-row justify-center items-center gap-x-1 ">
-            <h2 className="text-4xl">{data.sport_event_status.home_score}</h2>
-            <h2 className="text-3xl">-</h2>
-            <h2 className="text-4xl">{data.sport_event_status.away_score}</h2>
+    <div className="max-w-2xl mx-auto mt-10  text-white">
+      <Link to="/">
+        <BiArrowBack className="mb-5" size={25} />
+      </Link>
+      <Tabs>
+        <TabList>
+          <Tab>STATS OF MATCH</Tab>
+          <Tab>FUN FACTS</Tab>
+          {/* <Tab>LINEUP</Tab> */}
+        </TabList>
+
+        <TabPanel>
+          <div className="w-full h-full flex flex-col  items-center  mt-10  border  border-[#0055ff] p-5 rounded-l">
+            <div className="w-full h-full flex flex-col items-center gap-y-2">
+              {EmptyArray.length !== 0 ? (
+                EmptyArray.map((stats, index) => {
+                  const [statsName, [homeStats, awayStats]] = stats;
+                  return (
+                    <div
+                      key={index}
+                      className="w-full md:w-full flex flex-col justify-center  gap-y-1"
+                    >
+                      <div className="flex flex-row justify-between text-sm font-[550] tracking-wide">
+                        <h2>
+                          {homeStats}
+                          {index === 0 ? "%" : ""}
+                        </h2>
+                        <h2 className="capitalize">
+                          {statsName.split("_")[0]} {statsName.split("_")[1]}
+                        </h2>
+                        <h2>
+                          {awayStats}
+                          {index === 0 ? "%" : ""}
+                        </h2>
+                      </div>
+                      <div className=" h-3 flex flex-row">
+                        <div
+                          style={{
+                            width: `${findPercantage(
+                              homeStats,
+                              homeStats + awayStats
+                            )}%`,
+                          }}
+                          className="bg-[#ff0046]  rounded-l"
+                        ></div>
+                        <div
+                          style={{
+                            width: `${findPercantage(
+                              awayStats,
+                              homeStats + awayStats
+                            )}%`,
+                          }}
+                          className=" bg-[#eee] rounded-r"
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p>Loading...</p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="p-5 border border-black">
-          {data.sport_event.competitors[1].name}
-        </div>
-      </div>
-      <div className="w-full h-full flex flex-col items-center border border-black p-5 rounded-l">
-        <div className="w-full h-full flex flex-col items-center gap-y-2">
-          {EmptyArray.length !== 0 ? (
-            EmptyArray.map((stats, index) => {
-              const [statsName, [homeStats, awayStats]] = stats;
-              return (
-                <div
-                  key={index}
-                  className="w-full flex flex-col justify-center gap-y-1"
-                >
-                  <div className="flex flex-row justify-between text-sm font-[550] tracking-wide">
-                    <h2>
-                      {homeStats}
-                      {index === 0 ? "%" : ""}
-                    </h2>
-                    <h2 className="capitalize">
-                      {statsName.split("_")[0]} {statsName.split("_")[1]}
-                    </h2>
-                    <h2>
-                      {awayStats}
-                      {index === 0 ? "%" : ""}
-                    </h2>
-                  </div>
-                  <div className=" h-3 flex flex-row">
-                    <div
-                      style={{
-                        width: `${findPercantage(
-                          homeStats,
-                          homeStats + awayStats
-                        )}%`,
-                      }}
-                      className="bg-[#ff0046]  rounded-l"
-                    ></div>
-                    <div
-                      style={{
-                        width: `${findPercantage(
-                          awayStats,
-                          homeStats + awayStats
-                        )}%`,
-                      }}
-                      className=" bg-blue-500 rounded-r"
-                    ></div>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <p>Loading...</p>
-          )}
-        </div>
-      </div>
+        </TabPanel>
+        <TabPanel>
+          <FactsAboutMatch id={matchid} />
+        </TabPanel>
+        {/* <TabPanel>
+          <DetailLineUp id={matchid} />
+        </TabPanel> */}
+      </Tabs>
     </div>
   );
 };
